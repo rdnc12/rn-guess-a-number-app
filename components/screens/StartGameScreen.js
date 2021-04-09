@@ -14,7 +14,7 @@ import NumberContainer from "../NumberContainer";
 import Input from "../../components/Input";
 import Colors from "../../constants/colors";
 
-const StartGameScreen = ({}) => {
+const StartGameScreen = ({ onStartGame }) => {
   const [enteredValue, setEnteredValue] = useState("");
   const [confirmed, setConfirmed] = useState(false);
   const [selectedNumber, setSelectedNumber] = useState();
@@ -39,7 +39,7 @@ const StartGameScreen = ({}) => {
       return;
     }
     setConfirmed(true);
-    setEnteredValue(parseInt(chosenNumber));
+    setSelectedNumber(chosenNumber);
     setEnteredValue("");
     Keyboard.dismiss(); // when we click confirm button, keyboard will be disappeared.
   };
@@ -50,7 +50,7 @@ const StartGameScreen = ({}) => {
       <Card style={styles.summaryContainer}>
         <Text>You Selected</Text>
         <NumberContainer>{selectedNumber}</NumberContainer>
-        <Button/>
+        <Button title="Start Game" onPress={() => onStartGame(selectedNumber)} />
       </Card>
     );
   }
@@ -126,7 +126,7 @@ const styles = StyleSheet.create({
   },
   summaryContainer: {
     marginTop: 20,
-    alignItems:'center'
+    alignItems: "center",
   },
 });
 
