@@ -10,6 +10,7 @@ import {
 } from "react-native";
 
 import Card from "../Card";
+import NumberContainer from "../NumberContainer";
 import Input from "../../components/Input";
 import Colors from "../../constants/colors";
 
@@ -40,11 +41,18 @@ const StartGameScreen = ({}) => {
     setConfirmed(true);
     setEnteredValue(parseInt(chosenNumber));
     setEnteredValue("");
+    Keyboard.dismiss(); // when we click confirm button, keyboard will be disappeared.
   };
 
   let confirmOutput;
   if (confirmed) {
-    confirmOutput = <Text>Chosen Number: {selectedNumber}</Text>;
+    confirmOutput = (
+      <Card style={styles.summaryContainer}>
+        <Text>You Selected</Text>
+        <NumberContainer>{selectedNumber}</NumberContainer>
+        <Button/>
+      </Card>
+    );
   }
   return (
     <TouchableWithoutFeedback
@@ -115,6 +123,10 @@ const styles = StyleSheet.create({
   input: {
     width: 50,
     textAlign: "center",
+  },
+  summaryContainer: {
+    marginTop: 20,
+    alignItems:'center'
   },
 });
 
