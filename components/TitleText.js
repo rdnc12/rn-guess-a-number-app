@@ -12,6 +12,6 @@ const styles = StyleSheet.create({
   },
 });
 
-export default BodyText;
+export default TitleText;
 
 /// {{ ...styles.title, ...style }} ===> we can combine other styles
