@@ -9,6 +9,7 @@ import {
   Dimensions,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import * as ScreenOrientation from 'expo-screen-orientation';
 
 import NumberContainer from "../NumberContainer";
 import Card from "../Card";
@@ -37,28 +38,36 @@ const renderListItem = (listLength, itemData) => {
 };
 
 const GameScreen = ({ userChoice, onGameOver }) => {
-  const initialGuess = generateRandomBetween(1, 100, userChoice);
+  // freely rotate this as long as I'm configuring the game but as soon as
+  // the game starts you'll see that the orientation doesn't change
+  // It is good when our app reaches a certain point
+  //ScreenOrientation.lockAsync(ScreenOrientation.OrientationLock.PORTRAIT)
 
+  
+
+  const initialGuess = generateRandomBetween(1, 100, userChoice);
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
   const [deviceWidth, setDeviceWidth] = useState(Dimensions.get("window").width);
-  const [deviceHeight, setDeviceHeight] = useState(Dimensions.get("window").height);
+  const [deviceHeight, setDeviceHeight] = useState(
+    Dimensions.get("window").height
+  );
 
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
 
-  useEffect(()=>{
-    const updateLayout =()=>{
-      setDeviceHeight(Dimensions.get('window').height)
-      setDeviceWidth(Dimensions.get('window').width)
+  useEffect(() => {
+    const updateLayout = () => {
+      setDeviceHeight(Dimensions.get("window").height);
+      setDeviceWidth(Dimensions.get("window").width);
 
-      Dimensions.addEventListener('change',updateLayout);
+      Dimensions.addEventListener("change", updateLayout);
 
-      return ()=>{
-        Dimensions.removeEventListener('change',updateLayout)
-      }
-    }
-  })
+      return () => {
+        Dimensions.removeEventListener("change", updateLayout);
+      };
+    };
+  });
   useEffect(() => {
     if (currentGuess === userChoice) {
       onGameOver(pastGuesses.length);
@@ -104,7 +113,7 @@ const GameScreen = ({ userChoice, onGameOver }) => {
           <MainButton onPress={nextGuessHandler.bind(this, "greater")}>
             <Ionicons name="md-add" size={24} color="white" />
           </MainButton>
-          </View>
+        </View>
         <View style={styles.listContainer}>
           {/* <ScrollView contentContainerStyle={styles.list}>
           {pastGuesses.map((guess, index) =>
