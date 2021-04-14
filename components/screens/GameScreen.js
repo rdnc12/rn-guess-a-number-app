@@ -41,10 +41,24 @@ const GameScreen = ({ userChoice, onGameOver }) => {
 
   const [currentGuess, setCurrentGuess] = useState(initialGuess);
   const [pastGuesses, setPastGuesses] = useState([initialGuess.toString()]);
+  const [deviceWidth, setDeviceWidth] = useState(Dimensions.get("window").width);
+  const [deviceHeight, setDeviceHeight] = useState(Dimensions.get("window").height);
 
   const currentLow = useRef(1);
   const currentHigh = useRef(100);
 
+  useEffect(()=>{
+    const updateLayout =()=>{
+      setDeviceHeight(Dimensions.get('window').height)
+      setDeviceWidth(Dimensions.get('window').width)
+
+      Dimensions.addEventListener('change',updateLayout);
+
+      return ()=>{
+        Dimensions.removeEventListener('change',updateLayout)
+      }
+    }
+  })
   useEffect(() => {
     if (currentGuess === userChoice) {
       onGameOver(pastGuesses.length);
@@ -78,6 +92,35 @@ const GameScreen = ({ userChoice, onGameOver }) => {
       ...curPastGuesses,
     ]);
   };
+
+  if (deviceHeight > 500) {
+    return (
+      <View style={styles.screen}>
+        <TitleText>Opponent's Guess</TitleText>
+        <View style={styles.controls}>
+          <MainButton onPress={nextGuessHandler.bind(this, "lower")}>
+            <Ionicons name="md-remove" size={24} color="white" />
+          </MainButton>
+          <MainButton onPress={nextGuessHandler.bind(this, "greater")}>
+            <Ionicons name="md-add" size={24} color="white" />
+          </MainButton>
+          </View>
+        <View style={styles.listContainer}>
+          {/* <ScrollView contentContainerStyle={styles.list}>
+          {pastGuesses.map((guess, index) =>
+            renderListItem(guess, pastGuesses - index)
+          )}
+        </ScrollView> */}
+          <FlatList
+            keyExtractor={(item) => item}
+            data={pastGuesses}
+            renderItem={renderListItem.bind(this, pastGuesses.length)}
+            contentContainerStyle={styles.list}
+          />
+        </View>
+      </View>
+    );
+  }
   return (
     <View style={styles.screen}>
       <TitleText>Opponent's Guess</TitleText>
@@ -125,6 +168,12 @@ const styles = StyleSheet.create({
     marginTop: Dimensions.get("window").height > 600 ? 20 : 5,
     width: 300,
     maxWidth: "80%",
+  },
+  controls: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+    alignItems: "center",
+    width: "80%",
   },
   listContainer: {
     flex: 1,
