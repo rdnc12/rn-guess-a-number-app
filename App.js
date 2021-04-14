@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, Text, View, SafeAreaView } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import * as Font from "expo-font";
 import AppLoading from "expo-app-loading"; // it waits the app until functions is loaded.
@@ -61,11 +61,11 @@ export default function App() {
   }
 
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen}>
       <StatusBar StatusBarStyle="dark" />
       <Header title="Guess a number" />
       {content}
-    </View>
+    </SafeAreaView>
   );
 }
 
@@ -74,3 +74,6 @@ const styles = StyleSheet.create({
     flex: 1,
   },
 });
+
+
+//SafeAreaView => it arranges space for content
